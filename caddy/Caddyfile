@@ -27,3 +27,21 @@
     errors stderr
     tls off
 }
+
+:4200 {
+    proxy / cratedb:4200 {
+            transparent
+        }
+
+     errors stderr
+     tls off
+}
+
+:9268 {
+    proxy / crateadapter:9268 {
+            transparent
+        }
+
+     errors stderr
+     tls off
+}

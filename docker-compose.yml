@@ -7,6 +7,7 @@ networks:
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    cratedb_data: {}
 
 services:
 
@@ -26,6 +27,32 @@ services:
     restart: unless-stopped
     expose:
       - 9090
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  cratedb:
+    image: crate:2.3.4
+    container_name: cratedb
+    volumes:
+      - cratedb_data:/data
+    restart: unless-stopped
+    expose: 
+      - 4200
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "moitoring"
+
+  crateadapter:
+    image: crate_adapter:alpine-1
+    container_name: crateadapter
+    command:
+      - '-crate.url=http://cratedb:4200/_sql' 
+    restart: unless-stopped
+    expose:
+      - 9268
     networks:
       - monitor-net
     labels:
@@ -113,6 +140,7 @@ services:
       - "3000:3000"
       - "9090:9090"
       - "9093:9093"
+      - "4200:4200"
     volumes:
       - ./caddy/:/etc/caddy/
     environment:
@@ -123,3 +151,4 @@ services:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
+
