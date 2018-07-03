@@ -47,8 +47,10 @@ alerting:
 
 # Remote write endpoint configuration for InfluxDB.
 remote_write:
-  - url: "http://influxdb:8086/api/v1/prom/write?u=${ADMIN_USER}&p=${ADMIN_PASSWORD}&db=${INFLUX_DB}"
+#  - url: "http://172.17.0.1:1234/receive"
+#  - url: "http://influxdb:8086/api/v1/prom/write?u=${ADMIN_USER}&p=${ADMIN_PASSWORD}&db=${INFLUX_DB}"
+  - url: "http://influxdb:8086/api/v1/prom/write?u=mon_write&p=mon_write&db=db0"
 # Remote read endpoint configuration (for InfluxDB only at the moment).
-remote_read:
-  - url: "http://influxdb:8086/api/v1/prom/read"
+#remote_read:
+  - url: "http://influxdb:8086/api/v1/prom/read?u=mon_read&p=mon_read&db=db0"
 
