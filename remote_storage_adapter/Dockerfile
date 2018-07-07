@@ -1,8 +1,8 @@
-ARG  GOLANG_VERSION=1.10-alpine
-ARG PROMETHEUS_TAG=v2.3.1
-
+ARG GOLANG_VERSION=1.10-alpine
 FROM golang:${GOLANG_VERSION}
 LABEL maintainer "pgillich ta gmail.com"
+
+ARG PROMETHEUS_TAG=v2.3.1
 
 ENV INFLUXDB_URL=http://influxdb:8086/
 ENV INFLUXDB_DATABASE=db0
