@@ -62,7 +62,24 @@ services:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
-  
+
+  influxadapter:
+    image: pgillich/prometheus-remote_storage_adapter
+    container_name: influxadapter
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086/
+      - INFLUXDB_DATABASE=${INFLUX_DB:-db0}
+      - INFLUXDB_RETENTION_POLICY=autogen
+      - INFLUXDB_USER=${INFLUXDB_WRITE_USER:-mon_write}
+      - INFLUXDB_PW=${INFLUXDB_WRITE_USER_PASSWORD:-mon_write}
+    restart: unless-stopped
+    expose: 
+      - 9201
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
   alertmanager:
     image: prom/alertmanager:v0.14.0
     container_name: alertmanager
