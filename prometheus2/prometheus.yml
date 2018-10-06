@@ -1,0 +1,59 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'docker-host-alpha'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - "alert.rules"
+
+# A scrape configuration containing exactly one endpoint to scrape.
+scrape_configs:
+  - job_name: 'nodeexporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['nodeexporter:9100']
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  - job_name: 'prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9090']
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets: 
+      - 'alertmanager:9093'
+
+#  - job_name: 'nginx'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['nginxexporter:9113']
+
+#  - job_name: 'aspnetcore'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['eventlog-proxy:5000', 'eventlog:5000']
+
+# Remote write endpoint configuration for InfluxDB.
+remote_write:
+#  - url: "http://172.17.0.1:1234/receive"
+#  - url: "http://influxdb:8086/api/v1/prom/write?u=${ADMIN_USER}&p=${ADMIN_PASSWORD}&db=${INFLUX_DB}"
+#  - url: "http://influxdb:8086/api/v1/prom/write?u=mon_write&p=mon_write&db=db0"
+  - url: "http://influxadapter:9201/write"
+  - url: "http://influxadapter2:9201/write"
+# Remote read endpoint configuration (for InfluxDB only at the moment).
+#remote_read:
+#  - url: "http://influxdb:8086/api/v1/prom/read?u=mon_read&p=mon_read&db=db0"
+#  - url: "http://influxadapter:9201/read"
+
